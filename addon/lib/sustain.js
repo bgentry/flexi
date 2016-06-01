@@ -232,6 +232,7 @@ export default Obj.extend({
     Object.keys(inputs).forEach((key) => {
       this._component.set(key, inputs[key]);
     });
+    debugger;
 
     let _super = this._component.willInsertElement;
 
