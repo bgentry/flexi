@@ -18,6 +18,7 @@ Router.map(function() {
     this.route('sustain-labels-2');
     this.route('sustain-hooks');
     this.route('sustain-classic-component');
+    this.route('sustain-component-with-complicated-inputs');
   });
 
   this.route('docs', function() {
