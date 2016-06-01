@@ -6,6 +6,16 @@ const {
   inject
   } = Ember;
 
+function extractComponentKey(component, prefix) {
+  let value = null;
+  Object.keys(component).forEach((key) => {
+    if (key.startsWith(prefix)) {
+      value = component[key];
+    }
+  });
+  return value;
+}
+
 const component = Component.extend({
   layout,
   tagName: '',
@@ -13,14 +23,14 @@ const component = Component.extend({
   sustains: inject.service('-sustains'),
 
   label: null,
-  model: null,
+  inputs: null,
   component: null,
   copy: false,
   expires: null,
 
   willInsertElement() {
     let element = this.element || this._renderNode;
-    let properties = this.getProperties('label', 'component', 'model', 'copy', 'expires');
+    let properties = this.getProperties('label', 'component', 'inputs', 'copy', 'expires');
 
     properties.element = element;
     this.get('sustains').didInsert(properties);
@@ -32,6 +42,8 @@ const component = Component.extend({
   },
 
   init() {
+    this.component = extractComponentKey(this.componentInput, 'COMPONENT_PATH');
+    this.inputs = extractComponentKey(this.componentInput, 'COMPONENT_HASH');
     if (!this.label) {
       this.label = this.component;
     } else {
@@ -47,7 +59,7 @@ const component = Component.extend({
     // label setup after super
     this._super();
 
-    let properties = this.getProperties('label', 'component', 'model', 'copy', 'expires');
+    let properties = this.getProperties('label', 'component', 'inputs', 'copy', 'expires');
 
     this.get('sustains').install(properties);
   }
@@ -55,7 +67,7 @@ const component = Component.extend({
 });
 
 component.reopenClass({
-  positionalParams: ['component', 'model']
+  positionalParams: ['componentInput']
 });
 
 export default component;

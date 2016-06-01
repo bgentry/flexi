@@ -17,7 +17,7 @@ export default Obj.extend({
   // params exposed via the `{{sustain}}` helper
   component: '', // component name passed into the flexi-sustain marker
   label: null,
-  model: null,
+  inputs: null,
   copy: false,
   expires: DEFAULT_EXPIRES,
 
@@ -109,7 +109,7 @@ export default Obj.extend({
 
     this.setProperties({
       copy: to.copy,
-      model: to.model
+      inputs: to.inputs
     });
 
     this.updateExpires(to.expires);
@@ -215,7 +215,7 @@ export default Obj.extend({
 
   setupComponent() {
     let name = this.get('component');
-    let model = this.get('model');
+    let inputs = this.get('inputs');
 
     this._component = this.owner.lookup(`component:${name}`);
 
@@ -229,7 +229,9 @@ export default Obj.extend({
       }
       this._component.set('layout', template);
     }
-    this._component.set('model', model);
+    Object.keys(inputs).forEach((key) => {
+      this._component.set(key, inputs[key]);
+    });
 
     let _super = this._component.willInsertElement;
 
